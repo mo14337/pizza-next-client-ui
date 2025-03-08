@@ -9,6 +9,7 @@ import Image from "next/image";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
+import ToppingList from "./ToppingList";
 
 export type Product = {
   id: string;
@@ -137,6 +138,7 @@ const ProductCard = ({ product }: PropsTypes) => {
                     </div>
                   </RadioGroup>
                 </div>
+                <ToppingList />
               </div>
             </div>
           </DialogContent>
