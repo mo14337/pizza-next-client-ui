@@ -15,8 +15,8 @@ const ToppingCard = ({
   selectedTopping,
   handleToppingClick,
 }: PropsTypes) => {
-  const isCurrentSelected = selectedTopping.some(
-    (elm) => elm.id === topping.id
+  const isCurrentSelected = selectedTopping?.some(
+    (elm) => elm._id === topping._id
   );
   return (
     <Button

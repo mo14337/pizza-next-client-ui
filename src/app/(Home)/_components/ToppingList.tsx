@@ -1,60 +1,59 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ToppingCard from "./ToppingCard";
 
 export interface ITopping {
-  id: string;
+  _id: string;
   name: string;
   image: string;
   price: number;
-  isAvailable: boolean;
+  isPublish: boolean;
 }
-const data: ITopping[] = [
-  {
-    id: "1",
-    name: "Chicken",
-    image: "/pizza-main.png",
-    price: 50,
-    isAvailable: true,
-  },
-  {
-    id: "2",
-    name: "Cheese",
-    image: "/pizza-main.png",
-    price: 50,
-    isAvailable: true,
-  },
-  {
-    id: "3",
-    name: "Olivs",
-    image: "/pizza-main.png",
-    price: 50,
-    isAvailable: true,
-  },
-];
 const ToppingList = () => {
-  const [selectedTopping, setSelectedTopping] = useState<ITopping[]>([data[0]]);
+  const [toppings, setToppings] = useState<ITopping[]>([]);
+  const [selectedTopping, setSelectedTopping] = useState<ITopping[]>([]);
   const handleToppingClick = (topping: ITopping) => {
     const isAlreadyExists = selectedTopping.some(
-      (elm) => elm.id === topping.id
+      (elm) => elm._id === topping._id
     );
     if (isAlreadyExists) {
-      setSelectedTopping((prev) => prev.filter((elm) => elm.id !== topping.id));
+      setSelectedTopping((prev) =>
+        prev.filter((elm) => elm._id !== topping._id)
+      );
       return;
     }
 
     setSelectedTopping((prev) => [...prev, topping]);
   };
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const toppingResponse = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/catalog-service/topping`
+        );
+        const toppings = await toppingResponse.json();
+        console.log(toppings.data);
+        setToppings(toppings.data);
+        setSelectedTopping([toppings.data[0]]);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchData();
+  }, []);
   return (
     <section className=" mt-6">
       <h3>Extra Toppings</h3>
       <div className=" grid grid-cols-3 gap-4 mt-2">
-        {data.map((topping) => {
+        {toppings?.map((topping) => {
+          if (!topping.isPublish) {
+            return;
+          }
           return (
             <ToppingCard
               handleToppingClick={handleToppingClick}
               selectedTopping={selectedTopping}
-              key={topping.id}
+              key={topping._id}
               topping={topping}
             />
           );
