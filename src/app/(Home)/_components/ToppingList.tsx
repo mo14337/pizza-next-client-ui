@@ -34,7 +34,7 @@ const data: ITopping[] = [
 ];
 const ToppingList = () => {
   const [selectedTopping, setSelectedTopping] = useState<ITopping[]>([data[0]]);
-  const handleTopppppinfClick = (topping: ITopping) => {
+  const handleToppingClick = (topping: ITopping) => {
     const isAlreadyExists = selectedTopping.some(
       (elm) => elm.id === topping.id
     );
@@ -52,7 +52,7 @@ const ToppingList = () => {
         {data.map((topping) => {
           return (
             <ToppingCard
-              handleToppingClick={handleTopppppinfClick}
+              handleToppingClick={handleToppingClick}
               selectedTopping={selectedTopping}
               key={topping.id}
               topping={topping}

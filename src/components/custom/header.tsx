@@ -43,9 +43,12 @@ const Header = async () => {
               <SelectValue placeholder="Select Restaurant" />
             </SelectTrigger>
             <SelectContent>
-              {tenants.data.map((tenant: Tenant) => {
+              {tenants.data.map((tenant: Tenant, index: number) => {
                 return (
-                  <SelectItem key={tenant.id} value={String(tenant.id)}>
+                  <SelectItem
+                    key={tenant.id || index}
+                    value={String(tenant.id)}
+                  >
                     {tenant.name}
                   </SelectItem>
                 );
