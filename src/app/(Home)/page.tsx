@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Image from "next/image";
 import ProductCard, { Product } from "./_components/ProductCard";
+import { ICategory } from "@/lib/types";
 const products: Product[] = [
   {
     id: "1",
@@ -45,7 +46,12 @@ const products: Product[] = [
   },
 ];
 
-export default function Home() {
+export default async function Home() {
+  const categoryResponse = await fetch(
+    `${process.env.BACKEND_URL}/catalog-service/category`
+  );
+  const categoryData = await categoryResponse.json();
+  console.log(categoryData);
   return (
     <>
       <section className=" bg-white">
@@ -76,14 +82,19 @@ export default function Home() {
         <div className=" container mx-auto py-12">
           <Tabs defaultValue="pizza" className="">
             <TabsList>
-              <TabsTrigger value="pizza" className=" text-md">
-                Pizza
-              </TabsTrigger>
-              <TabsTrigger value="breverages" className=" text-md">
-                Beverages
-              </TabsTrigger>
+              {categoryData?.data?.map((category: ICategory) => {
+                return (
+                  <TabsTrigger
+                    key={category._id}
+                    value={category._id!}
+                    className=" text-md"
+                  >
+                    {category.name}
+                  </TabsTrigger>
+                );
+              })}
             </TabsList>
-            <TabsContent value="pizza">
+            <TabsContent value="Pizza">
               <div className=" grid grid-cols-4 gap-6 mt-6">
                 {products.map((product: Product) => {
                   return (
@@ -94,7 +105,7 @@ export default function Home() {
                 })}
               </div>
             </TabsContent>
-            <TabsContent value="breverages">
+            <TabsContent value="Breverages">
               <div className=" grid grid-cols-4 gap-6 mt-6">
                 {products.slice(0, 4).map((product: Product) => {
                   return (

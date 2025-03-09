@@ -20,7 +20,6 @@ const Header = async () => {
     }
   );
   const tenants = await tenantResponse.json();
-  console.log(tenants);
 
   return (
     <header className=" bg-white ">
