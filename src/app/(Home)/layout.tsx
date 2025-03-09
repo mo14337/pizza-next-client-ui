@@ -1,11 +1,14 @@
 import Header from "@/components/custom/header";
 import React, { ReactNode } from "react";
+import StoreProvider from "../StoreProvider";
 
 const layout = ({ children }: { children: ReactNode }) => {
   return (
     <>
-      <Header />
-      <main>{children}</main>
+      <StoreProvider>
+        <Header />
+        <main>{children}</main>
+      </StoreProvider>
     </>
   );
 };

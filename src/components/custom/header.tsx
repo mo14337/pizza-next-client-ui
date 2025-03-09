@@ -7,9 +7,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import Link from "next/link";
-import { Phone, ShoppingBasketIcon } from "lucide-react";
+import { Phone } from "lucide-react";
 import { Button } from "../ui/button";
 import { Tenant } from "@/lib/types";
+import Cart from "./Cart";
 const Header = async () => {
   const tenantResponse = await fetch(
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth-service/tenants?perPage=100`,
@@ -65,14 +66,7 @@ const Header = async () => {
               Orders
             </Link>
           </ul>
-          <div className=" relative">
-            <Link href={"/"}>
-              <ShoppingBasketIcon />
-              <span className=" absolute -top-4 -right-5 h-6 w-6 flex items-center justify-center rounded-full bg-primary font-bold text-white">
-                3
-              </span>
-            </Link>
-          </div>
+          <Cart />
           <div className=" flex items-center gap-x-2 ml-12">
             <Phone />
             <span>+91 0000 000 000</span>

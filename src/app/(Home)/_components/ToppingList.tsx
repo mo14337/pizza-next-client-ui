@@ -32,7 +32,6 @@ const ToppingList = () => {
           `${process.env.NEXT_PUBLIC_BACKEND_URL}/catalog-service/topping`
         );
         const toppings = await toppingResponse.json();
-        console.log(toppings.data);
         setToppings(toppings.data);
         setSelectedTopping([toppings.data[0]]);
       } catch (error) {

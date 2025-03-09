@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { Suspense } from "react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
@@ -58,7 +59,9 @@ const ProductModal = ({ product }: { product: IProduct }) => {
                 );
               }
             )}
-            <ToppingList />
+            <Suspense fallback={"Loading..."}>
+              <ToppingList />
+            </Suspense>
             <div className=" flex items-center justify-between mt-8">
               <span className=" font-bold">&#8377;400</span>
               <Button>
