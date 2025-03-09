@@ -1,57 +1,20 @@
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Image from "next/image";
-import ProductCard, { Product } from "./_components/ProductCard";
-import { ICategory } from "@/lib/types";
-const products: Product[] = [
-  {
-    id: "1",
-    name: "Margherita Pizza",
-    description:
-      "Classic pizza topped with fresh tomatoes, mozzarella, and basil.",
-    image: "/pizza-main.png",
-    price: 10.99,
-  },
-  {
-    id: "2",
-    name: "Pepperoni Pizza",
-    description:
-      "Loaded with spicy pepperoni slices and a blend of mozzarella cheese.",
-    image: "/pizza-main.png",
-    price: 12.99,
-  },
-  {
-    id: "3",
-    name: "Veggie Supreme Pizza",
-    description:
-      "Topped with bell peppers, onions, mushrooms, olives, and sweet corn.",
-    image: "/pizza-main.png",
-    price: 11.99,
-  },
-  {
-    id: "4",
-    name: "BBQ Chicken Pizza",
-    description:
-      "Smoky BBQ sauce with grilled chicken, onions, and mozzarella.",
-    image: "/pizza-main.png",
-    price: 13.99,
-  },
-  {
-    id: "5",
-    name: "Four Cheese Pizza",
-    description:
-      "A heavenly blend of mozzarella, cheddar, parmesan, and blue cheese.",
-    image: "/pizza-main.png",
-    price: 14.99,
-  },
-];
+import ProductCard from "./_components/ProductCard";
+import { ICategory, IProduct } from "@/lib/types";
 
 export default async function Home() {
   const categoryResponse = await fetch(
     `${process.env.BACKEND_URL}/catalog-service/category`
   );
   const categoryData = await categoryResponse.json();
-  console.log(categoryData);
+
+  const productResponse = await fetch(
+    `${process.env.BACKEND_URL}/catalog-service/product?perPage=100&tenantId=2`
+  );
+  const products = await productResponse.json();
+  console.log(products);
   return (
     <>
       <section className=" bg-white">
@@ -80,7 +43,7 @@ export default async function Home() {
       </section>
       <section>
         <div className=" container mx-auto py-12">
-          <Tabs defaultValue="pizza" className="">
+          <Tabs defaultValue={categoryData.data[0]._id} className="">
             <TabsList>
               {categoryData?.data?.map((category: ICategory) => {
                 return (
@@ -94,28 +57,26 @@ export default async function Home() {
                 );
               })}
             </TabsList>
-            <TabsContent value="Pizza">
-              <div className=" grid grid-cols-4 gap-6 mt-6">
-                {products.map((product: Product) => {
-                  return (
-                    <>
-                      <ProductCard key={product.id} product={product} />
-                    </>
-                  );
-                })}
-              </div>
-            </TabsContent>
-            <TabsContent value="Breverages">
-              <div className=" grid grid-cols-4 gap-6 mt-6">
-                {products.slice(0, 4).map((product: Product) => {
-                  return (
-                    <>
-                      <ProductCard key={product.id} product={product} />
-                    </>
-                  );
-                })}
-              </div>
-            </TabsContent>
+            {categoryData.data.map((category: ICategory) => {
+              return (
+                <TabsContent key={category._id} value={category._id!}>
+                  <div className=" grid grid-cols-4 gap-6 mt-6">
+                    {products.data
+                      .filter(
+                        (product: IProduct) =>
+                          product.categoryId === category._id
+                      )
+                      .map((product: IProduct) => {
+                        return (
+                          <>
+                            <ProductCard key={product._id} product={product} />
+                          </>
+                        );
+                      })}
+                  </div>
+                </TabsContent>
+              );
+            })}
           </Tabs>
         </div>
       </section>
