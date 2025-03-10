@@ -3,7 +3,7 @@ import React, { Suspense, useState } from "react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-import ToppingList from "./ToppingList";
+import ToppingList, { ITopping } from "./ToppingList";
 import { Button } from "@/components/ui/button";
 import { ShoppingCart } from "lucide-react";
 import { IProduct } from "@/lib/types";
@@ -13,7 +13,21 @@ type choosenConfig = {
   [key: string]: string;
 };
 const ProductModal = ({ product }: { product: IProduct }) => {
+  const [selectedTopping, setSelectedTopping] = useState<ITopping[]>([]);
   const [choosenConfig, setChoosenConfig] = useState<choosenConfig>();
+  const handleToppingClick = (topping: ITopping) => {
+    const isAlreadyExists = selectedTopping.some(
+      (elm) => elm._id === topping._id
+    );
+    if (isAlreadyExists) {
+      setSelectedTopping((prev) =>
+        prev.filter((elm) => elm._id !== topping._id)
+      );
+      return;
+    }
+
+    setSelectedTopping((prev) => [...prev, topping]);
+  };
   const handleRadioChange = (key: string, data: string) => {
     setChoosenConfig((prev) => {
       return {
@@ -74,7 +88,11 @@ const ProductModal = ({ product }: { product: IProduct }) => {
               }
             )}
             <Suspense fallback={"Loading..."}>
-              <ToppingList />
+              <ToppingList
+                selectedTopping={selectedTopping}
+                setSelectedTopping={setSelectedTopping}
+                handleToppingClick={handleToppingClick}
+              />
             </Suspense>
             <div className=" flex items-center justify-between mt-8">
               <span className=" font-bold">&#8377;400</span>

@@ -9,22 +9,17 @@ export interface ITopping {
   price: number;
   isPublish: boolean;
 }
-const ToppingList = () => {
+const ToppingList = ({
+  selectedTopping,
+  setSelectedTopping,
+  handleToppingClick,
+}: {
+  selectedTopping: ITopping[];
+  setSelectedTopping: React.Dispatch<React.SetStateAction<ITopping[]>>;
+  handleToppingClick: (arg: ITopping) => void;
+}) => {
   const [toppings, setToppings] = useState<ITopping[]>([]);
-  const [selectedTopping, setSelectedTopping] = useState<ITopping[]>([]);
-  const handleToppingClick = (topping: ITopping) => {
-    const isAlreadyExists = selectedTopping.some(
-      (elm) => elm._id === topping._id
-    );
-    if (isAlreadyExists) {
-      setSelectedTopping((prev) =>
-        prev.filter((elm) => elm._id !== topping._id)
-      );
-      return;
-    }
 
-    setSelectedTopping((prev) => [...prev, topping]);
-  };
   useEffect(() => {
     async function fetchData() {
       try {
@@ -39,7 +34,7 @@ const ToppingList = () => {
       }
     }
     fetchData();
-  }, []);
+  }, [setSelectedTopping]);
   return (
     <section className=" mt-6">
       <h3>Extra Toppings</h3>
