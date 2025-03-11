@@ -28,7 +28,6 @@ const ToppingList = ({
         );
         const toppings = await toppingResponse.json();
         setToppings(toppings.data);
-        setSelectedTopping([toppings.data[0]]);
       } catch (error) {
         console.log(error);
       }

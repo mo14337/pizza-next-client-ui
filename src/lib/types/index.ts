@@ -27,7 +27,7 @@ export interface ICategory {
 
 interface priceConfiguration {
   priceType: string;
-  availableOptions: Map<string, number>;
+  availableOptions: Record<string, number>;
 }
 
 export interface IProduct {
@@ -35,7 +35,7 @@ export interface IProduct {
   name: string;
   description: string;
   image: string;
-  priceConfiguration: Map<string, priceConfiguration>;
+  priceConfiguration: Record<string, priceConfiguration>;
   attributes: {
     name: string;
     value: string | number;
