@@ -8,13 +8,33 @@ import { Button } from "@/components/ui/button";
 import { ShoppingCart } from "lucide-react";
 import { IProduct } from "@/lib/types";
 import Image from "next/image";
+import { addToCart, CartItem } from "@/lib/store/features/cart/cartSlice";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 
 type choosenConfig = {
   [key: string]: string;
 };
 const ProductModal = ({ product }: { product: IProduct }) => {
+  const defaultConfiguration = Object.entries(
+    product.category.priceConfiguration
+  )
+    .map(([key, value]) => {
+      return {
+        [key]: value.availableOptions[0],
+      };
+    })
+    .reduce((acc, cur) => {
+      return {
+        ...acc,
+        ...cur,
+      };
+    }, {});
   const [selectedTopping, setSelectedTopping] = useState<ITopping[]>([]);
-  const [choosenConfig, setChoosenConfig] = useState<choosenConfig>();
+  const [choosenConfig, setChoosenConfig] =
+    useState<choosenConfig>(defaultConfiguration);
+  const dispatch = useAppDispatch();
+  const cart = useAppSelector((state) => state.cart);
+  console.log(cart);
   const handleToppingClick = (topping: ITopping) => {
     const isAlreadyExists = selectedTopping.some(
       (elm) => elm._id === topping._id
@@ -36,7 +56,17 @@ const ProductModal = ({ product }: { product: IProduct }) => {
       };
     });
   };
-  console.log(choosenConfig);
+  const handleAddToCart = (product: IProduct) => {
+    const itemToAdd: CartItem = {
+      product,
+      choosenConfiguration: {
+        priceConfiguration: choosenConfig!,
+        selectedToppings: selectedTopping,
+      },
+    };
+    console.log(itemToAdd);
+    dispatch(addToCart(itemToAdd));
+  };
   return (
     <Dialog>
       <DialogTrigger className=" bg-orange-200 hover:bg-orange-300 text-orange-500 px-6 py-2 rounded-full shadow hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150">
@@ -96,7 +126,7 @@ const ProductModal = ({ product }: { product: IProduct }) => {
             </Suspense>
             <div className=" flex items-center justify-between mt-8">
               <span className=" font-bold">&#8377;400</span>
-              <Button>
+              <Button onClick={() => handleAddToCart(product)}>
                 <ShoppingCart />
                 <span className=" ">Add to cart</span>
               </Button>
