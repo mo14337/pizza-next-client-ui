@@ -117,13 +117,15 @@ const ProductModal = ({ product }: { product: IProduct }) => {
                 );
               }
             )}
-            <Suspense fallback={"Loading..."}>
-              <ToppingList
-                selectedTopping={selectedTopping}
-                setSelectedTopping={setSelectedTopping}
-                handleToppingClick={handleToppingClick}
-              />
-            </Suspense>
+            {product.category.hasToppings && (
+              <Suspense fallback={"Loading..."}>
+                <ToppingList
+                  selectedTopping={selectedTopping}
+                  setSelectedTopping={setSelectedTopping}
+                  handleToppingClick={handleToppingClick}
+                />
+              </Suspense>
+            )}
             <div className=" flex items-center justify-between mt-8">
               <span className=" font-bold">&#8377;{totalPrice}</span>
               <Button onClick={() => handleAddToCart(product)}>

@@ -8,7 +8,7 @@ const ProductList = async () => {
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/catalog-service/category`,
     {
       next: {
-        revalidate: 3600, //1hr
+        revalidate: 10, //1hr
       },
     }
   );
@@ -18,7 +18,7 @@ const ProductList = async () => {
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/catalog-service/product?perPage=100&tenantId=2`,
     {
       next: {
-        revalidate: 3600, //1hr
+        revalidate: 10, //1hr
       },
     }
   );

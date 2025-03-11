@@ -23,6 +23,7 @@ export interface ICategory {
   name: string;
   priceConfiguration: PriceConfiguration;
   attributes: Attribute[];
+  hasToppings: boolean;
 }
 
 interface priceConfiguration {
