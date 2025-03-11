@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import ProductList from "./_components/ProductList";
 import { Suspense } from "react";
+import ProductCardsSkeleton from "./_components/ProductCardsSkeleton";
 
 export default async function Home() {
   return (
@@ -30,7 +31,7 @@ export default async function Home() {
           </div>
         </div>
       </section>
-      <Suspense fallback={"Loading..."}>
+      <Suspense fallback={<ProductCardsSkeleton />}>
         <ProductList />
       </Suspense>
     </>
