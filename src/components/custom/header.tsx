@@ -10,7 +10,7 @@ import Link from "next/link";
 import { Phone } from "lucide-react";
 import { Button } from "../ui/button";
 import { Tenant } from "@/lib/types";
-import Cart from "./Cart";
+import CartCount from "./CartCount";
 const Header = async () => {
   const tenantResponse = await fetch(
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth-service/tenants?perPage=100`,
@@ -66,7 +66,7 @@ const Header = async () => {
               Orders
             </Link>
           </ul>
-          <Cart />
+          <CartCount />
           <div className=" flex items-center gap-x-2 ml-12">
             <Phone />
             <span>+91 0000 000 000</span>
