@@ -9,8 +9,9 @@ import { ShoppingCart } from "lucide-react";
 import { IProduct } from "@/lib/types";
 import Image from "next/image";
 import { addToCart, CartItem } from "@/lib/store/features/cart/cartSlice";
-import { useAppDispatch } from "@/lib/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { getDefaultConfig } from "./helpers";
+import { hashTheItem } from "@/lib/utils";
 
 type choosenConfig = {
   [key: string]: string;
@@ -21,6 +22,7 @@ const ProductModal = ({ product }: { product: IProduct }) => {
   const [choosenConfig, setChoosenConfig] =
     useState<choosenConfig>(defaultConfiguration);
   const dispatch = useAppDispatch();
+  const cartItems = useAppSelector((state) => state.cart.cartItems);
   const handleToppingClick = (topping: ITopping) => {
     const isAlreadyExists = selectedTopping.some(
       (elm) => elm._id === topping._id
@@ -44,11 +46,15 @@ const ProductModal = ({ product }: { product: IProduct }) => {
   };
   const handleAddToCart = (product: IProduct) => {
     const itemToAdd: CartItem = {
-      product,
+      _id: product._id,
+      name: product.name,
+      image: product.image,
+      priceConfiguration: product.priceConfiguration,
       choosenConfiguration: {
         priceConfiguration: choosenConfig!,
         selectedToppings: selectedTopping,
       },
+      qty: 1,
     };
     dispatch(addToCart(itemToAdd));
   };
@@ -67,6 +73,22 @@ const ProductModal = ({ product }: { product: IProduct }) => {
     );
     return topingsTotal + configPrice;
   }, [choosenConfig, selectedTopping, product.priceConfiguration]);
+
+  const alreadyHasInCart = useMemo(() => {
+    const currentConfiguration = {
+      _id: product._id,
+      name: product.name,
+      image: product.image,
+      priceConfiguration: product.priceConfiguration,
+      choosenConfiguration: {
+        priceConfiguration: { ...choosenConfig },
+        selectedToppings: selectedTopping,
+      },
+      qty: 1,
+    };
+    const hash = hashTheItem(currentConfiguration);
+    return cartItems.some((item) => item.hash === hash);
+  }, [product, cartItems, choosenConfig, selectedTopping]);
   return (
     <Dialog>
       <DialogTrigger className=" bg-orange-200 hover:bg-orange-300 text-orange-500 px-6 py-2 rounded-full shadow hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150">
@@ -128,9 +150,14 @@ const ProductModal = ({ product }: { product: IProduct }) => {
             )}
             <div className=" flex items-center justify-between mt-8">
               <span className=" font-bold">&#8377;{totalPrice}</span>
-              <Button onClick={() => handleAddToCart(product)}>
+              <Button
+                disabled={alreadyHasInCart}
+                onClick={() => handleAddToCart(product)}
+              >
                 <ShoppingCart />
-                <span className=" ">Add to cart</span>
+                <span className=" ">
+                  {alreadyHasInCart ? "Already in cart" : "Add to cart"}
+                </span>
               </Button>
             </div>
           </div>
