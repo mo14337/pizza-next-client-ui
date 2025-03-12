@@ -17,6 +17,7 @@ type choosenConfig = {
   [key: string]: string;
 };
 const ProductModal = ({ product }: { product: IProduct }) => {
+  const [isOpen, setIsOpen] = useState(false);
   const defaultConfiguration = getDefaultConfig(product);
   const [selectedTopping, setSelectedTopping] = useState<ITopping[]>([]);
   const [choosenConfig, setChoosenConfig] =
@@ -57,6 +58,8 @@ const ProductModal = ({ product }: { product: IProduct }) => {
       qty: 1,
     };
     dispatch(addToCart(itemToAdd));
+    setIsOpen(false);
+    setSelectedTopping([]);
   };
 
   const totalPrice = useMemo(() => {
@@ -90,8 +93,11 @@ const ProductModal = ({ product }: { product: IProduct }) => {
     return cartItems.some((item) => item.hash === hash);
   }, [product, cartItems, choosenConfig, selectedTopping]);
   return (
-    <Dialog>
-      <DialogTrigger className=" bg-orange-200 hover:bg-orange-300 text-orange-500 px-6 py-2 rounded-full shadow hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150">
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger
+        onClick={() => setIsOpen(false)}
+        className=" bg-orange-200 hover:bg-orange-300 text-orange-500 px-6 py-2 rounded-full shadow hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150"
+      >
         Choose
       </DialogTrigger>
       <DialogContent className=" bg-[#F6F0EE] max-w-3xl p-0">
