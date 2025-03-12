@@ -11,8 +11,8 @@ export default async function Home() {
         <div className="container mx-auto flex items-center justify-between">
           <div>
             <h1 className=" text-7xl font-black font-sans ">
-              Super delicious pizza in <br />
-              <span className=" text-primary">Only 45 minutes!</span>
+              Super Delicious Pizza in <br />
+              <span className=" text-primary">Only 45 Minutes!</span>
             </h1>
             <p className=" text-2xl mt-8 max-w-lg leading-snug">
               Enjoy a free meal it takes more than 45mins.
