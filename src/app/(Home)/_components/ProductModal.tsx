@@ -5,13 +5,14 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import ToppingList, { ITopping } from "./ToppingList";
 import { Button } from "@/components/ui/button";
-import { ShoppingCart } from "lucide-react";
+import { CheckCircle, ShoppingCart } from "lucide-react";
 import { IProduct } from "@/lib/types";
 import Image from "next/image";
 import { addToCart, CartItem } from "@/lib/store/features/cart/cartSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { getDefaultConfig } from "./helpers";
 import { hashTheItem } from "@/lib/utils";
+import { toast } from "sonner";
 
 type choosenConfig = {
   [key: string]: string;
@@ -60,6 +61,10 @@ const ProductModal = ({ product }: { product: IProduct }) => {
     dispatch(addToCart(itemToAdd));
     setIsOpen(false);
     setSelectedTopping([]);
+    toast.success("Item Added to cart.", {
+      position: "top-center",
+      icon: <CheckCircle />,
+    });
   };
 
   const totalPrice = useMemo(() => {
