@@ -9,6 +9,7 @@ import Image from "next/image";
 
 import { IProduct } from "@/lib/types";
 import ProductModal from "./ProductModal";
+import { getFromPrice } from "@/lib/utils";
 
 type PropsTypes = {
   product: IProduct;
@@ -30,7 +31,7 @@ const ProductCard = ({ product }: PropsTypes) => {
       </CardContent>
       <CardFooter className=" flex items-center justify-between">
         <p>
-          From <span className=" font-bold">₹{"50"}</span>
+          From <span className=" font-bold">₹{getFromPrice(product)}</span>
         </p>
         <ProductModal product={product} />
       </CardFooter>
