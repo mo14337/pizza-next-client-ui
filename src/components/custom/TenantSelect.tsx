@@ -8,16 +8,20 @@ import {
   SelectValue,
 } from "../ui/select";
 import { Tenant } from "@/lib/types";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const TenantSelect = ({ tenants }: { tenants: Tenant[] }) => {
   const router = useRouter();
   const hanldeSelectChange = (id: string) => {
     router.push(`/?tenant=${id}`);
   };
+  const searchParams = useSearchParams();
   return (
     <>
-      <Select onValueChange={hanldeSelectChange}>
+      <Select
+        onValueChange={hanldeSelectChange}
+        defaultValue={searchParams.get("tenant") || undefined}
+      >
         <SelectTrigger className="w-[180px]">
           <SelectValue placeholder="Select Restaurant" />
         </SelectTrigger>
