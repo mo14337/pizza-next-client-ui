@@ -4,7 +4,11 @@ import ProductList from "./_components/ProductList";
 import { Suspense } from "react";
 import ProductCardsSkeleton from "./_components/ProductCardsSkeleton";
 
-export default async function Home() {
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: { tenant: string };
+}) {
   return (
     <>
       <section className=" bg-white">
@@ -32,7 +36,7 @@ export default async function Home() {
         </div>
       </section>
       <Suspense fallback={<ProductCardsSkeleton />}>
-        <ProductList />
+        <ProductList tenantId={searchParams.tenant} />
       </Suspense>
     </>
   );

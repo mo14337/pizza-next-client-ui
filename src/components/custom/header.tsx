@@ -1,16 +1,9 @@
 import React from "react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import Link from "next/link";
 import { Phone } from "lucide-react";
 import { Button } from "../ui/button";
-import { Tenant } from "@/lib/types";
 import CartCount from "./CartCount";
+import TenantSelect from "./TenantSelect";
 const Header = async () => {
   const tenantResponse = await fetch(
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth-service/tenants?perPage=100`,
@@ -39,23 +32,7 @@ const Header = async () => {
             />
             <circle cx="11" cy="11" r="7.5" stroke="#F65F42" strokeWidth="7" />
           </svg>
-          <Select>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Select Restaurant" />
-            </SelectTrigger>
-            <SelectContent>
-              {tenants.data.map((tenant: Tenant, index: number) => {
-                return (
-                  <SelectItem
-                    key={tenant.id || index}
-                    value={String(tenant.id)}
-                  >
-                    {tenant.name}
-                  </SelectItem>
-                );
-              })}
-            </SelectContent>
-          </Select>
+          <TenantSelect tenants={tenants.data} />
         </div>
         <div className=" flex items-center gap-4">
           <ul className=" flex items-center font-medium space-x-4">

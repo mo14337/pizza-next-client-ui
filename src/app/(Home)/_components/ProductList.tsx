@@ -3,7 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ICategory, IProduct } from "@/lib/types";
 import ProductCard from "./ProductCard";
 
-const ProductList = async () => {
+const ProductList = async ({ tenantId }: { tenantId: string }) => {
   const categoryResponse = await fetch(
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/catalog-service/category`,
     {
@@ -13,9 +13,8 @@ const ProductList = async () => {
     }
   );
   const categoryData = await categoryResponse.json();
-
   const productResponse = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/catalog-service/product?perPage=100&tenantId=2`,
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/catalog-service/product?perPage=100&tenantId=${tenantId}`,
     {
       next: {
         revalidate: 10, //1hr
