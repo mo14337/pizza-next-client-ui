@@ -8,7 +8,7 @@ const CartCount = () => {
   const cartCount = useAppSelector((state) => state.cart.cartItems);
   return (
     <div className=" relative">
-      <Link href={"/"}>
+      <Link href={"/cart"}>
         <ShoppingBasketIcon />
         <span className=" absolute -top-4 -right-5 h-6 w-6 flex items-center justify-center rounded-full bg-primary font-bold text-white">
           {cartCount.length || 0}
