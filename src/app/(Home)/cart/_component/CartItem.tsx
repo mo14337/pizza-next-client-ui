@@ -83,7 +83,7 @@ export default function CartItem({
           </Button>
         </div>
         <p className="font-semibold">₹{totalPrice}</p>
-        <Button variant="ghost" size="icon" onClick={() => onRemove(item._id)}>
+        <Button variant="ghost" size="icon" onClick={() => onRemove(item.hash)}>
           <X size={16} />
         </Button>
       </div>

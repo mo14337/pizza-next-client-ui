@@ -5,7 +5,7 @@ import CartSummary from "./_component/CartSummary";
 import { ShoppingCartIcon } from "lucide-react";
 import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
-import { changeQty } from "@/lib/store/features/cart/cartSlice";
+import { changeQty, removeCartItem } from "@/lib/store/features/cart/cartSlice";
 
 export default function ShoppingCart() {
   const cart = useAppSelector((state) => state.cart.cartItems);
@@ -15,9 +15,8 @@ export default function ShoppingCart() {
     dispatch(changeQty({ hash, qty }));
   };
 
-  const handleRemove = (id: string) => {
-    console.log("remove", id);
-    // setCart(cart.filter((item) => item.id !== id));
+  const handleRemove = (hash: string) => {
+    dispatch(removeCartItem(hash));
   };
 
   const totalPrice = 0;
