@@ -5,6 +5,7 @@ import { Button } from "../ui/button";
 import TenantSelect from "./TenantSelect";
 import dynamic from "next/dynamic";
 import { getSession } from "@/lib/session";
+import Logout from "./Logout";
 const CartCount = dynamic(() => import("./CartCount"), { ssr: false });
 const Header = async () => {
   const session = await getSession();
@@ -60,7 +61,13 @@ const Header = async () => {
             <Phone />
             <span>+91 0000 000 000</span>
           </div>
-          <Button size={"sm"}>{session ? "Logout" : "Login"}</Button>
+          {session ? (
+            <Logout />
+          ) : (
+            <Button size={"sm"} asChild>
+              <Link href={"/login"}>Login</Link>
+            </Button>
+          )}
         </div>
       </nav>
     </header>
