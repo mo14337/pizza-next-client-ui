@@ -6,6 +6,8 @@ import { ShoppingCartIcon } from "lucide-react";
 import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { changeQty, removeCartItem } from "@/lib/store/features/cart/cartSlice";
+import { useMemo } from "react";
+import { getItemTotal } from "@/lib/utils";
 
 export default function ShoppingCart() {
   const cart = useAppSelector((state) => state.cart.cartItems);
@@ -19,21 +21,13 @@ export default function ShoppingCart() {
     dispatch(removeCartItem(hash));
   };
 
-  const totalPrice = 0;
-  //  useMemo(() => {
-  //   // const topingsTotal = selectedTopping.reduce(
-  //   //   (acc, curr) => acc + curr.price,
-  //   //   0
-  //   // );
-  //   // const configPrice = Object.entries(choosenConfig).reduce(
-  //   //   (acc, [key, value]: [string, string]) => {
-  //   //     const price = product.priceConfiguration[key]?.availableOptions[value];
-  //   //     return acc + price;
-  //   //   },
-  //   //   0
-  //   // );
-  //   // return topingsTotal + configPrice;
-  // }, []);
+  const totalPrice = useMemo(() => {
+    const finalTotal = cart.reduce(
+      (acc, curr) => getItemTotal(curr) * curr.qty + acc,
+      0
+    );
+    return finalTotal;
+  }, [cart]);
 
   return (
     <div className="w-[70vw] mx-auto p-6 rounded-lg">

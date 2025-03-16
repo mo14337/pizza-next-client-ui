@@ -3,7 +3,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { IProduct } from "@/lib/types";
 import { ITopping } from "../../_components/ToppingList";
-import { useMemo } from "react";
+import { useTotal } from "@/hooks/useTotal";
 
 export interface CartItemType
   extends Pick<IProduct, "_id" | "name" | "image" | "priceConfiguration"> {
@@ -27,19 +27,7 @@ export default function CartItem({
   onUpdateQuantity,
   onRemove,
 }: CartItemProps) {
-  const totalPrice = useMemo(() => {
-    const topingsTotal = item.choosenConfiguration.selectedToppings.reduce(
-      (acc, curr) => acc + curr.price,
-      0
-    );
-    const configPrice = Object.entries(
-      item.choosenConfiguration.priceConfiguration
-    ).reduce((acc, [key, value]: [string, string]) => {
-      const price = item.priceConfiguration[key]?.availableOptions[value];
-      return acc + price;
-    }, 0);
-    return topingsTotal + configPrice;
-  }, [item]);
+  const totalPrice = useTotal(item);
   const choosenConfig = Object.values(
     item.choosenConfiguration.priceConfiguration
   ).join(", ");
@@ -82,7 +70,7 @@ export default function CartItem({
             <Plus size={16} />
           </Button>
         </div>
-        <p className="font-semibold">₹{totalPrice}</p>
+        <p className="font-semibold">₹{totalPrice * item.qty}</p>
         <Button variant="ghost" size="icon" onClick={() => onRemove(item.hash)}>
           <X size={16} />
         </Button>
