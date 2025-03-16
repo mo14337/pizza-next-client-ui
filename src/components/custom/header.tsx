@@ -2,9 +2,13 @@ import React from "react";
 import Link from "next/link";
 import { Phone } from "lucide-react";
 import { Button } from "../ui/button";
-import CartCount from "./CartCount";
 import TenantSelect from "./TenantSelect";
+import dynamic from "next/dynamic";
+import { getSession } from "@/lib/session";
+const CartCount = dynamic(() => import("./CartCount"), { ssr: false });
 const Header = async () => {
+  const session = await getSession();
+
   const tenantResponse = await fetch(
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth-service/tenants?perPage=100`,
     {
@@ -56,7 +60,7 @@ const Header = async () => {
             <Phone />
             <span>+91 0000 000 000</span>
           </div>
-          <Button size={"sm"}>Logout</Button>
+          <Button size={"sm"}>{session ? "Logout" : "Login"}</Button>
         </div>
       </nav>
     </header>

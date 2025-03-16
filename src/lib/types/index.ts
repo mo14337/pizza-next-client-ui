@@ -46,3 +46,12 @@ export interface IProduct {
   isPublish: boolean;
   category: ICategory;
 }
+
+export interface IUser {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: "admin" | "customer" | "manager";
+  tenant: number | null;
+}
