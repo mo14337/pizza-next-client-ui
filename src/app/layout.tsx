@@ -3,6 +3,7 @@ import "./globals.css";
 import { Manrope } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/sonner";
+import Refresher from "@/components/custom/Refresher";
 
 const manrope = Manrope({
   subsets: ["latin"],
@@ -27,7 +28,7 @@ export default function RootLayout({
           " min-h-screen bg-background font-manrope antialiased"
         )}
       >
-        {children}
+        <Refresher>{children}</Refresher>
         <Toaster />
       </body>
     </html>
