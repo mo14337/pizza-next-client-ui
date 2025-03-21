@@ -8,12 +8,14 @@ import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { changeQty, removeCartItem } from "@/lib/store/features/cart/cartSlice";
 import { useMemo } from "react";
 import { getItemTotal } from "@/lib/utils";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function ShoppingCart() {
   const router = useRouter();
   const cart = useAppSelector((state) => state.cart.cartItems);
   const dispatch = useAppDispatch();
+  const searchParams = useSearchParams();
+  const tenant = searchParams.get("tenant");
 
   const handleUpdateQuantity = (hash: string, qty: number) => {
     dispatch(changeQty({ hash, qty }));
@@ -46,7 +48,9 @@ export default function ShoppingCart() {
           ))}
           <CartSummary
             totalPrice={totalPrice || 0}
-            onCheckout={() => router.push("/checkout")}
+            onCheckout={() =>
+              router.push(`/checkout${tenant && `?tenant=${tenant}`}`)
+            }
           />
         </div>
       ) : (

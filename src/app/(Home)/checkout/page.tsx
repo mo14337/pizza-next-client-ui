@@ -17,11 +17,15 @@ import { getSession } from "@/lib/session";
 import { Coins, CreditCard, Plus } from "lucide-react";
 import { redirect } from "next/navigation";
 
-export default async function Checkout() {
+export default async function Checkout({
+  searchParams,
+}: {
+  searchParams: { tenant: string };
+}) {
   const session = await getSession();
-  console.log("session", session);
+  const queryString = new URLSearchParams(searchParams);
   if (!session) {
-    redirect("/login");
+    redirect(`/login?${queryString}`);
   }
   return (
     <div className="flex container mx-auto gap-6 mt-16">
