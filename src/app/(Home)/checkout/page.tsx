@@ -24,6 +24,9 @@ export default async function Checkout({
 }) {
   const session = await getSession();
   const queryString = new URLSearchParams(searchParams);
+  const existingQueryString = queryString.toString();
+  queryString.append("return-to", `/checkout?${existingQueryString}`);
+  console.log(queryString);
   if (!session) {
     redirect(`/login?${queryString}`);
   }
