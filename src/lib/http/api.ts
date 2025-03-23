@@ -12,3 +12,7 @@ export const api = axios.create({
 const BillingServicePrefix = "/billing";
 //customer
 export const getCustomer = () => api.get(`${BillingServicePrefix}/customer`);
+export const addAddress = (address: string, id: string) =>
+  api.patch(`${BillingServicePrefix}customer/addresses/${id}`, {
+    address,
+  });

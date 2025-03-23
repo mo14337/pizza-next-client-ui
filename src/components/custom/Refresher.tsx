@@ -33,18 +33,18 @@ const Refresher = ({ children }: { children: React.ReactNode }) => {
 
       const token = await jose.decodeJwt(accessToken);
       const exp = token.exp! * 1000; // Convert to Milliseconds
-      console.log({ exp, token });
+      // console.log({ exp, token });
 
       const currentTime = Date.now();
       const refreshTime = exp - currentTime - 5000;
 
-      console.log(`Current time: ${new Date(currentTime).toISOString()}`);
-      console.log(`Token expiry time: ${new Date(exp).toISOString()}`);
-      console.log(
-        `Scheduled refresh time: ${new Date(
-          currentTime + refreshTime
-        ).toISOString()}`
-      );
+      // console.log(`Current time: ${new Date(currentTime).toISOString()}`);
+      // console.log(`Token expiry time: ${new Date(exp).toISOString()}`);
+      // console.log(
+      //   `Scheduled refresh time: ${new Date(
+      //     currentTime + refreshTime
+      //   ).toISOString()}`
+      // );
 
       // todo: [bug/limitation]
       // The value of refreshTime should be equal or less than MAXIMUM_SAFE_INTEGER which is 2,147,483,647 (32 bit signed int)
