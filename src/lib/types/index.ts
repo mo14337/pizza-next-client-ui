@@ -70,3 +70,8 @@ export interface ICustomer {
   createdAt?: Date;
   updatedAt?: Date;
 }
+
+export type CouponCodeData = {
+  code: string;
+  tenantId: string;
+};
