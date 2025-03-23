@@ -15,18 +15,18 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
 import { getCustomer } from "@/lib/http/api";
+import { ICustomer } from "@/lib/types";
 import { useQuery } from "@tanstack/react-query";
 import { Coins, CreditCard, Plus } from "lucide-react";
 
 const CustomerForm = () => {
-  const { data: customer } = useQuery({
+  const { data: customer } = useQuery<ICustomer>({
     queryKey: ["customer"],
     queryFn: async () => {
       return await getCustomer().then((res) => res.data);
     },
   });
   //todo: handle error and loading
-  console.log(customer);
   return (
     <div className="flex container mx-auto gap-6 mt-16">
       <Card className="w-3/5 border-none">
@@ -76,14 +76,14 @@ const CustomerForm = () => {
                         <span className="ml-2">Add New Address</span>
                       </Button>
                     </DialogTrigger>
-                    <DialogContent className="sm:max-w-[425px]">
+                    <DialogContent className="sm:max-w-[425px] bg-white">
                       <DialogHeader>
                         <DialogTitle>Add Address</DialogTitle>
                         <DialogDescription>
                           We can save your address for next time order.
                         </DialogDescription>
                       </DialogHeader>
-                      <div className="grid gap-4 py-4">
+                      <div className="grid gap-4 py-4 ">
                         <div>
                           <Label htmlFor="address">Address</Label>
                           <Textarea className="mt-2" />
@@ -99,7 +99,23 @@ const CustomerForm = () => {
                   defaultValue="option-one"
                   className="grid grid-cols-2 gap-6 mt-2"
                 >
-                  <Card className="p-6">
+                  {customer?.addresses.map((address: { text: string }) => (
+                    <Card className="p-6" key={address.text}>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem
+                          value={address.text}
+                          id={address.text}
+                        />
+                        <Label
+                          htmlFor={address.text}
+                          className="leading-normal"
+                        >
+                          {address.text}
+                        </Label>
+                      </div>
+                    </Card>
+                  ))}
+                  {/* <Card className="p-6">
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="option-one" id="option-one" />
                       <Label htmlFor="option-one" className="leading-normal">
@@ -116,7 +132,7 @@ const CustomerForm = () => {
                         Maharashtra, India 400069
                       </Label>
                     </div>
-                  </Card>
+                  </Card> */}
                 </RadioGroup>
               </div>
             </div>

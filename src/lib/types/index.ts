@@ -55,3 +55,17 @@ export interface IUser {
   role: "admin" | "customer" | "manager";
   tenant: number | null;
 }
+
+export interface IAddress {
+  text: string;
+  isDefault: boolean;
+}
+export interface ICustomer {
+  userId: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  addresses: IAddress[];
+  createdAt?: Date;
+  updatedAt?: Date;
+}
