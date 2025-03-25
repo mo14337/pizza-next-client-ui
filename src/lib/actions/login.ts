@@ -39,7 +39,6 @@ export default async function login(prevState: any, formdata: FormData) {
     }
     const parsedAccessToken = parse(accessToken);
     const parsedRefreshToken = parse(refreshToken);
-    console.log(parsedAccessToken, parsedRefreshToken);
     cookies().set({
       name: "accessToken",
       value: parsedAccessToken.accessToken,
