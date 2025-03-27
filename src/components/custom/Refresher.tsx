@@ -54,7 +54,6 @@ const Refresher = ({ children }: { children: React.ReactNode }) => {
 
       timeoutId.current = setTimeout(() => {
         refreshAccessToken();
-        console.log("Access token is refreshing...");
       }, refreshTime);
     } catch (err: any) {}
   }, []);
