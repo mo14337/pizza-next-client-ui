@@ -20,6 +20,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import OrderSummary from "./OrderSummary";
+import { useAppSelector } from "@/lib/store/hooks";
+import { useRef } from "react";
+import { useSearchParams } from "next/navigation";
 const formSchema = z.object({
   address: z.string({ required_error: "Address required" }),
   paymentMethod: z.enum(["card", "cash"], {
@@ -28,6 +31,9 @@ const formSchema = z.object({
   comment: z.any(),
 });
 const CustomerForm = () => {
+  const choosesCode = useRef(null);
+  const cart = useAppSelector((state) => state.cart);
+  const searchParams = useSearchParams();
   const customerForm = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
@@ -39,7 +45,22 @@ const CustomerForm = () => {
   });
 
   const handlePlaceOrder = async (data: z.infer<typeof formSchema>) => {
-    console.log(data);
+    //   "couponCode":"SAMPLE_CO_d",
+    // "tenantId":"2",
+    // "comment":"xzjvsdv bb dskvldv",
+    // "customerId":"67efe8f3b745443e937dff7a",
+    // "paymentMode":"cash",
+    // "address":"hsdbvjvbkjd",
+    const orderData = {
+      cart: cart.cartItems,
+      address: data.address,
+      paymentMethod: data.paymentMethod,
+      comment: data.comment,
+      customerID: customer?._id,
+      couponCode: choosesCode.current || "",
+      tenantId: searchParams.get("tenant") || "",
+    };
+    console.log("orderData", orderData);
   };
   //todo: handle error and loading
   return (
@@ -196,7 +217,9 @@ const CustomerForm = () => {
               </div>
             </CardContent>
           </Card>
-          <OrderSummary />
+          <OrderSummary
+            handleCouponCodeChange={(code) => (choosesCode.current = code)}
+          />
         </div>
       </form>
     </Form>

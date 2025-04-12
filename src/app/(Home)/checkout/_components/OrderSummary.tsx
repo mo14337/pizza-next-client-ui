@@ -11,7 +11,11 @@ import { useSearchParams } from "next/navigation";
 import React, { useMemo } from "react";
 const TAXES_PERCENTAGE = 18;
 const DELIVERY_CHARGES = 100;
-const OrderSummary = () => {
+const OrderSummary = ({
+  handleCouponCodeChange,
+}: {
+  handleCouponCodeChange: (arg: string) => void;
+}) => {
   const searchParams = useSearchParams();
   const couponCodeRef = React.useRef<HTMLInputElement>(null);
   const [discountPercentage, setDiscountPercentage] = React.useState(0);
@@ -24,19 +28,19 @@ const OrderSummary = () => {
     );
     return finalTotal;
   }, [cart]);
-  const discontAmont = useMemo(() => {
+  const discountAmont = useMemo(() => {
     return (subTotal * discountPercentage) / 100;
   }, [subTotal, discountPercentage]);
   const taxesAmount = useMemo(() => {
-    const amountAfterDiscount = subTotal - discontAmont;
+    const amountAfterDiscount = subTotal - discountAmont;
     return Math.round((amountAfterDiscount * TAXES_PERCENTAGE) / 100);
-  }, [subTotal, discontAmont]);
+  }, [subTotal, discountAmont]);
   const grandTotalWithoutDiscount = useMemo(() => {
-    return subTotal + taxesAmount + DELIVERY_CHARGES - discontAmont;
-  }, [subTotal, discontAmont, taxesAmount]);
+    return subTotal + taxesAmount + DELIVERY_CHARGES;
+  }, [subTotal, taxesAmount]);
   const grandTotal = useMemo(() => {
-    return subTotal + taxesAmount + DELIVERY_CHARGES - discontAmont;
-  }, [subTotal, discontAmont, taxesAmount]);
+    return subTotal + taxesAmount + DELIVERY_CHARGES - discountAmont;
+  }, [subTotal, discountAmont, taxesAmount]);
 
   const { mutate, isError } = useMutation({
     mutationKey: ["validateCoupon"],
@@ -56,6 +60,7 @@ const OrderSummary = () => {
     onSuccess: (data: { success: boolean; discount: number }) => {
       if (data.success) {
         setCouponError("");
+        handleCouponCodeChange(couponCodeRef.current.value || "");
         return setDiscountPercentage(data.discount);
       }
     },
@@ -90,7 +95,7 @@ const OrderSummary = () => {
         </div>
         <div className="flex items-center justify-between">
           <span>Discount</span>
-          <span className="font-bold">₹{discontAmont}</span>
+          <span className="font-bold">₹{discountAmont}</span>
         </div>
         <hr />
         <div className="flex items-center justify-between">
