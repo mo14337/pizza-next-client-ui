@@ -1,3 +1,5 @@
+import { CartItem } from "../store/features/cart/cartSlice";
+
 export type Tenant = {
   address: string;
   name: string;
@@ -75,3 +77,13 @@ export type CouponCodeData = {
   code: string;
   tenantId: string;
 };
+
+export interface OrderType {
+  cart: CartItem[];
+  address: string;
+  paymentMode: string;
+  comment: string;
+  customerId: string;
+  couponCode: string;
+  tenantId: string;
+}

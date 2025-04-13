@@ -5,9 +5,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
-import { getCustomer } from "@/lib/http/api";
-import { ICustomer } from "@/lib/types";
-import { useQuery } from "@tanstack/react-query";
+import { createOrder, getCustomer } from "@/lib/http/api";
+import { ICustomer, OrderType } from "@/lib/types";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { Coins, CreditCard } from "lucide-react";
 import AddAddress from "./AddAddress";
 import { useForm } from "react-hook-form";
@@ -23,6 +23,7 @@ import OrderSummary from "./OrderSummary";
 import { useAppSelector } from "@/lib/store/hooks";
 import { useRef } from "react";
 import { useSearchParams } from "next/navigation";
+import { v4 as uuidv4 } from "uuid";
 const formSchema = z.object({
   address: z.string({ required_error: "Address required" }),
   paymentMethod: z.enum(["card", "cash"], {
@@ -43,24 +44,25 @@ const CustomerForm = () => {
       return await getCustomer().then((res) => res.data);
     },
   });
+  const { mutate } = useMutation({
+    mutationKey: ["order"],
+    mutationFn: async (data: OrderType) => {
+      const idempotencyKey = uuidv4() + customer._id;
+      await createOrder(data, idempotencyKey);
+    },
+  });
 
   const handlePlaceOrder = async (data: z.infer<typeof formSchema>) => {
-    //   "couponCode":"SAMPLE_CO_d",
-    // "tenantId":"2",
-    // "comment":"xzjvsdv bb dskvldv",
-    // "customerId":"67efe8f3b745443e937dff7a",
-    // "paymentMode":"cash",
-    // "address":"hsdbvjvbkjd",
     const orderData = {
       cart: cart.cartItems,
       address: data.address,
-      paymentMethod: data.paymentMethod,
+      paymentMode: data.paymentMethod,
       comment: data.comment,
-      customerID: customer?._id,
+      customerId: customer?._id,
       couponCode: choosesCode.current || "",
       tenantId: searchParams.get("tenant") || "",
     };
-    console.log("orderData", orderData);
+    mutate(orderData);
   };
   //todo: handle error and loading
   return (
