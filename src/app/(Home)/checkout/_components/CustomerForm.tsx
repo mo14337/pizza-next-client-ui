@@ -33,6 +33,7 @@ const formSchema = z.object({
 });
 const CustomerForm = () => {
   const choosesCode = useRef(null);
+  const idempotencyKeyRef = useRef(null);
   const cart = useAppSelector((state) => state.cart);
   const searchParams = useSearchParams();
   const customerForm = useForm<z.infer<typeof formSchema>>({
@@ -47,7 +48,9 @@ const CustomerForm = () => {
   const { mutate } = useMutation({
     mutationKey: ["order"],
     mutationFn: async (data: OrderType) => {
-      const idempotencyKey = uuidv4() + customer._id;
+      const idempotencyKey = idempotencyKeyRef.current
+        ? idempotencyKeyRef.current
+        : (idempotencyKeyRef.current = uuidv4() + customer._id);
       await createOrder(data, idempotencyKey);
     },
   });
