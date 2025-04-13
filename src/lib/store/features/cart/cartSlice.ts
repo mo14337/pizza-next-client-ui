@@ -58,6 +58,12 @@ export const cartSlice = createSlice({
       state.cartItems.splice(index, 1);
       localStorage.setItem("cartItem", JSON.stringify([...state.cartItems]));
     },
+    clearCart: () => {
+      window.localStorage.setItem("cartItems", JSON.stringify([]));
+      return {
+        cartItems: [],
+      };
+    },
   },
 });
 
