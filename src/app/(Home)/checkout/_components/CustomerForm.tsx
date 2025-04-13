@@ -51,7 +51,12 @@ const CustomerForm = () => {
       const idempotencyKey = idempotencyKeyRef.current
         ? idempotencyKeyRef.current
         : (idempotencyKeyRef.current = uuidv4() + customer._id);
-      await createOrder(data, idempotencyKey);
+      return await createOrder(data, idempotencyKey).then((res) => res.data);
+    },
+    onSuccess: (data: { paymentUrl: string | null }) => {
+      if (data.paymentUrl) {
+        window.location.href = data.paymentUrl;
+      }
     },
   });
 
