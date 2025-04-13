@@ -7,14 +7,17 @@ import { CouponCodeData } from "@/lib/types";
 import { getItemTotal } from "@/lib/utils";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
+import { LoaderCircle } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import React, { useMemo } from "react";
 const TAXES_PERCENTAGE = 18;
 const DELIVERY_CHARGES = 100;
 const OrderSummary = ({
   handleCouponCodeChange,
+  isPlaceOrderPending,
 }: {
   handleCouponCodeChange: (arg: string) => void;
+  isPlaceOrderPending: boolean;
 }) => {
   const searchParams = useSearchParams();
   const couponCodeRef = React.useRef<HTMLInputElement>(null);
@@ -108,8 +111,10 @@ const OrderSummary = ({
             >
               ₹{grandTotalWithoutDiscount}
             </span>
-            {discountPercentage && (
+            {discountPercentage ? (
               <span className="text-green-600"> ₹{grandTotal}</span>
+            ) : (
+              ""
             )}
           </span>
         </div>
@@ -133,7 +138,16 @@ const OrderSummary = ({
         </div>
 
         <div className="text-right mt-6">
-          <Button>Place order</Button>
+          <Button disabled={isPlaceOrderPending}>
+            {isPlaceOrderPending ? (
+              <span className=" flex items-center gap-2">
+                <LoaderCircle />
+                <span>Please wait...</span>
+              </span>
+            ) : (
+              <span>Place order</span>
+            )}
+          </Button>
         </div>
       </CardContent>
     </Card>
