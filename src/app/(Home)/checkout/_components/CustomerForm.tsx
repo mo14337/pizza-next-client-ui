@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { createOrder, getCustomer } from "@/lib/http/api";
 import { ICustomer, OrderType } from "@/lib/types";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { Coins, CreditCard } from "lucide-react";
+import { CheckCircle, Coins, CreditCard } from "lucide-react";
 import AddAddress from "./AddAddress";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -24,6 +24,9 @@ import { useAppSelector } from "@/lib/store/hooks";
 import { useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
+import { toast } from "sonner";
+import { useDispatch } from "react-redux";
+import { clearCart } from "@/lib/store/features/cart/cartSlice";
 const formSchema = z.object({
   address: z.string({ required_error: "Address required" }),
   paymentMethod: z.enum(["card", "cash"], {
@@ -32,6 +35,7 @@ const formSchema = z.object({
   comment: z.any(),
 });
 const CustomerForm = () => {
+  const dispatch = useDispatch();
   const choosesCode = useRef(null);
   const idempotencyKeyRef = useRef(null);
   const cart = useAppSelector((state) => state.cart);
@@ -57,6 +61,11 @@ const CustomerForm = () => {
       if (data.paymentUrl) {
         window.location.href = data.paymentUrl;
       }
+      dispatch(clearCart());
+      toast.success("Order placed succesfully", {
+        position: "top-center",
+        icon: <CheckCircle />,
+      });
     },
   });
 

@@ -8,7 +8,7 @@ const CartCleaner = () => {
 
   React.useEffect(() => {
     dispatch(clearCart());
-  }, []);
+  }, [dispatch]);
   return null;
 };
 
