@@ -87,3 +87,19 @@ export interface OrderType {
   couponCode: string;
   tenantId: string;
 }
+
+export interface Order {
+  _id: string;
+  customerId: ICustomer;
+  total: number;
+  discount: number;
+  taxes: number;
+  deliveryCharges: number;
+  address: string;
+  tenantId: string;
+  comment?: string;
+  paymentMode: string;
+  orderStatus: string;
+  paymentStatus: string;
+  createdAt: string;
+}

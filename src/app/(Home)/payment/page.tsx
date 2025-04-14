@@ -16,9 +16,15 @@ import CartCleaner from "../checkout/_components/CartCleaner";
 const Payment = ({
   searchParams,
 }: {
-  searchParams: { success: string; orderId: string; tenant: string };
+  searchParams: {
+    success: string;
+    orderId: string;
+    tenant: string;
+    method: string;
+  };
 }) => {
   const isOrderSuccess = searchParams.success === "true";
+  const isCashPayment = searchParams.method === "cash";
 
   return (
     <>
@@ -70,11 +76,13 @@ const Payment = ({
                 </Link>
               </div>
 
-              <div className="flex items-center gap-2 mt-2">
-                <LayoutDashboard size={20} />
-                <h2 className="text-base font-medium">Payment status: </h2>
-                <span>Paid</span>
-              </div>
+              {isCashPayment && (
+                <div className="flex items-center gap-2 mt-2">
+                  <LayoutDashboard size={20} />
+                  <h2 className="text-base font-medium">Payment status: </h2>
+                  <span>Paid</span>
+                </div>
+              )}
             </CardContent>
           </Card>
         )}
@@ -82,7 +90,7 @@ const Payment = ({
         {isOrderSuccess ? (
           <Button asChild className="mt-6">
             <Link
-              href={`/order/${searchParams.orderId}?teant=${searchParams.tenant}`}
+              href={`/order/${searchParams.orderId}?tenant=${searchParams.tenant}`}
               className="flex items-center gap-2"
             >
               <ArrowLeft size={20} className="text-white" />
