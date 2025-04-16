@@ -27,3 +27,10 @@ export const createOrder = (data: OrderType, idempotencyKey: string) =>
       "Idempotency-key": idempotencyKey,
     },
   });
+
+export const getSingleOrder = (orderId: string) =>
+  api.get(`${BillingServicePrefix}/order/orders/${orderId}`, {
+    headers: {
+      "Idempotency-key": orderId,
+    },
+  });
