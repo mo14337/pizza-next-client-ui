@@ -21,7 +21,7 @@ import React from "react";
 
 const Orders = async () => {
   const response = await fetch(
-    `${process.env.BACKEND_URL}/api/order/orders/mine`,
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/billing/order/orders/mine`,
     {
       headers: {
         Authorization: `Bearer ${cookies().get("accessToken")?.value}`,
@@ -33,17 +33,18 @@ const Orders = async () => {
     throw new Error("Error Fetching my order.");
   }
 
-  const orders = (await response.json()) || [];
+  const orders = (await response.json()).orders || [];
+  console.log(orders);
 
   return (
-    <div className="container mt-8">
+    <div className="container mx-auto mt-8">
       <Card>
         <CardHeader className="px-7">
           <CardTitle>Orders</CardTitle>
           <CardDescription>My complete order history.</CardDescription>
         </CardHeader>
         <CardContent>
-          {orders.length === 0 ? (
+          {orders?.length === 0 ? (
             "No orders yet."
           ) : (
             <Table>
@@ -59,7 +60,7 @@ const Orders = async () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {orders.map((order: Order) => {
+                {orders?.map((order: Order) => {
                   return (
                     <TableRow key={order._id}>
                       <TableCell className="font-medium">{order._id}</TableCell>

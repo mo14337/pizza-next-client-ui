@@ -52,7 +52,7 @@ const Header = async () => {
             <Link href={"/"} className=" hover:text-primary">
               Menu
             </Link>
-            <Link href={"/"} className=" hover:text-primary">
+            <Link href={"/orders"} className=" hover:text-primary">
               Orders
             </Link>
           </ul>
