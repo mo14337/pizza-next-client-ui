@@ -14,12 +14,25 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { getSession } from "@/lib/session";
 import { Order } from "@/lib/types";
 import { cookies } from "next/headers";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import React from "react";
 
-const Orders = async () => {
+const Orders = async ({
+  searchParams,
+}: {
+  searchParams: { tenant: string };
+}) => {
+  const queryString = new URLSearchParams(searchParams);
+  const existingQueryString = queryString.toString();
+  queryString.append("return-to", `/checkout?${existingQueryString}`);
+  const session = await getSession();
+  if (!session) {
+    redirect(`/login?${queryString}`);
+  }
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/billing/order/orders/mine`,
     {
@@ -34,7 +47,6 @@ const Orders = async () => {
   }
 
   const orders = (await response.json()).orders || [];
-  console.log(orders);
 
   return (
     <div className="container mx-auto mt-8">
