@@ -16,7 +16,7 @@ import OrderStatus from "./components/orderStatus";
 
 const SingleOrder = async ({ params }: { params: { orderId: string } }) => {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/billing/order/orders/${params.orderId}?fields=address,paymentStatus,paymentMode`,
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/billing/order/orders/${params.orderId}?fields=address,paymentStatus,paymentMode,tenantId`,
     {
       headers: {
         Authorization: `Bearer ${cookies().get("accessToken")?.value}`,
@@ -25,10 +25,10 @@ const SingleOrder = async ({ params }: { params: { orderId: string } }) => {
   );
 
   if (!response.ok) {
-    console.log(response);
     throw new Error("Failed to fetch single order");
   }
-  const order: Order = (await response.json()).order;
+  const order: Order = (await response.json())?.order;
+  console.log(order);
 
   return (
     <div className="container mx-auto mt-6 flex flex-col gap-6">
