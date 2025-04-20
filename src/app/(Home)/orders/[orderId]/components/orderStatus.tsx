@@ -47,11 +47,10 @@ const StepperChanger = ({ orderId }: { orderId: string }) => {
   const { data } = useQuery<Order>({
     queryKey: ["order", orderId],
     queryFn: async () => {
-      return await getSingleOrder(orderId).then((res) => res.data);
+      return await getSingleOrder(orderId).then((res) => res.data.order);
     },
     refetchInterval: 1000 * 30, // every 30 secs.
   });
-
   React.useEffect(() => {
     if (data) {
       const currentStep = statusMapping[data.orderStatus] || 0;
